@@ -3,6 +3,23 @@
 A list of your party showing who has Bardic Inspiration. Tap a character to add or remove it.
 Everyone who opens the app sees the same state, refreshed every 3 seconds.
 
+## Character images
+
+Give an image URL when adding a character, or use the 🖼 button to change or remove it.
+Only the URL is saved. Use a direct, long-lasting link to the image file (http or https).
+If it doesn't load, the character's initial is shown. An HTTPS site such as Vercel needs HTTPS images.
+The image host can see the IP address of everyone who views the app.
+
+## Import and export
+
+**Export JSON** downloads the current list. **Import JSON** replaces the shared list for everyone
+(it doesn't merge), up to 30 characters. The file looks like this; `inspired` and `imageUrl` are optional:
+
+    { "characters": [
+      { "name": "Lyra", "inspired": true, "imageUrl": "https://example.com/lyra.png" },
+      { "name": "Thorn" }
+    ] }
+
 ## Docker
 
     docker compose up -d --build

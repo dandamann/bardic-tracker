@@ -15,11 +15,17 @@ button { cursor:pointer; }
 button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
 #party { list-style:none; padding:0; margin:0 0 20px; display:grid; gap:10px; }
 #party li { display:flex; gap:8px; }
-.toggle { flex:1; display:flex; justify-content:space-between; align-items:center; gap:12px; min-height:64px; text-align:left; border-width:2px; }
+.toggle { flex:1; min-width:0; display:flex; align-items:center; gap:12px; min-height:64px; text-align:left; border-width:2px; }
 .toggle[aria-pressed=true] { border-color:var(--gold); background:color-mix(in srgb, var(--gold) 22%, var(--card)); }
 .name { font-size:1.15rem; font-weight:600; overflow-wrap:anywhere; min-width:0; }
-.badge { color:var(--muted); font-size:.9rem; white-space:nowrap; }
+.badge { color:var(--muted); font-size:.9rem; }
+.info { display:flex; flex-direction:column; min-width:0; }
+.avatar { flex:none; width:56px; height:56px; border-radius:50%; object-fit:cover; }
+span.avatar { display:grid; place-items:center; background:var(--line); font-size:1.4rem; }
 [aria-pressed=true] .badge { color:var(--ink); font-weight:600; }
-.remove { color:var(--muted); }
-#form { display:flex; gap:8px; }
-#form input { flex:1; min-width:0; }
+.side { color:var(--muted); padding:10px; min-width:44px; }
+#form { display:grid; gap:8px; }
+#form input { width:100%; min-width:0; }
+.transfer { display:flex; justify-content:center; gap:8px; margin-top:24px; }
+.transfer button { font-size:.9rem; color:var(--muted); }
+button:disabled { opacity:.4; cursor:default; }

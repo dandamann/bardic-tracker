@@ -18,8 +18,14 @@
     <p id="empty" class="muted" hidden>No characters yet. Add your party below.</p>
     <form id="form">
       <input name="name" maxlength="40" required autocomplete="off" placeholder="Character name" aria-label="Character name">
+      <input name="imageUrl" type="url" maxlength="1000" autocomplete="off" placeholder="Image URL (optional)" aria-label="Image URL (optional)">
       <button class="primary">Add</button>
     </form>
+    <div class="transfer">
+      <button type="button" id="exportBtn" disabled>Export JSON</button>
+      <button type="button" id="importBtn" disabled>Import JSON</button>
+      <input type="file" id="importFile" accept=".json,application/json" hidden>
+    </div>
   </main>
   <script src="/app.js"></script>
 </body>

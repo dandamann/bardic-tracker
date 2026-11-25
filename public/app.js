@@ -74,6 +74,16 @@ async function refresh() {
   }
 }
 
+// Shows the first letter if there is no image or it fails to load.
+function avatar(c) {
+  const initial = () => el('span', { className: 'avatar', textContent: [...c.name][0].toUpperCase(), ariaHidden: 'true' });
+  if (!c.imageUrl) return initial();
+  const img = el('img', { className: 'avatar', alt: '', referrerPolicy: 'no-referrer' });
+  img.onerror = () => img.replaceWith(initial());
+  img.src = c.imageUrl;
+  return img;
+}
+
 function row(c) {
   const toggle = el('button', {
     type: 'button',
@@ -81,27 +91,66 @@ function row(c) {
     ariaPressed: String(c.inspired),
     onclick: () => act({ type: 'setInspired', id: c.id, inspired: !c.inspired }),
   },
-  el('span', { className: 'name', textContent: c.name }),
-  el('span', { className: 'badge', textContent: c.inspired ? '♪ Inspired' : 'Not inspired' }));
+  avatar(c),
+  el('span', { className: 'info' },
+    el('span', { className: 'name', textContent: c.name }),
+    el('span', { className: 'badge', textContent: c.inspired ? '♪ Inspired' : 'Not inspired' })));
+  const image = el('button', {
+    type: 'button',
+    className: 'side',
+    textContent: '🖼',
+    title: 'Change image',
+    ariaLabel: `Change image for ${c.name}`,
+    onclick: () => {
+      const url = prompt(`Image URL for ${c.name} (leave blank to remove):`, c.imageUrl || '');
+      if (url !== null) act({ type: 'setImage', id: c.id, imageUrl: url });
+    },
+  });
   const remove = el('button', {
     type: 'button',
-    className: 'remove',
+    className: 'side',
     textContent: '✕',
     ariaLabel: `Remove ${c.name}`,
     onclick: () => { if (confirm(`Remove ${c.name}?`)) act({ type: 'remove', id: c.id }); },
   });
-  return el('li', {}, toggle, remove);
+  return el('li', {}, toggle, image, remove);
 }
 
 function render() {
   $('party').replaceChildren(...state.characters.map(row));
   $('empty').hidden = state.characters.length > 0;
+  $('exportBtn').disabled = state.characters.length === 0;
+  $('importBtn').disabled = false;
 }
+
+$('exportBtn').onclick = () => {
+  const characters = state.characters.map(({ name, inspired, imageUrl }) => ({ name, inspired, imageUrl }));
+  const url = URL.createObjectURL(
+    new Blob([JSON.stringify({ characters }, null, 2)], { type: 'application/json' }));
+  el('a', { href: url, download: 'bardic-party.json' }).click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
+
+$('importBtn').onclick = () => $('importFile').click();
+$('importFile').onchange = async (event) => {
+  const [file] = event.target.files;
+  event.target.value = ''; // lets the same file be picked again
+  if (!file) return;
+  let characters;
+  try {
+    ({ characters } = JSON.parse(await file.text()));
+  } catch {}
+  if (!Array.isArray(characters)) return showError('That file is not a character list export.');
+  if (state.characters.length &&
+      !confirm(`Replace the shared list with ${characters.length} imported character(s)? This affects everyone.`)) return;
+  await act({ type: 'import', characters });
+};
 
 $('form').onsubmit = async (event) => {
   event.preventDefault();
-  const input = event.target.elements.name;
-  if (await act({ type: 'add', name: input.value })) input.value = '';
+  const form = event.target;
+  const { name, imageUrl } = form.elements;
+  if (await act({ type: 'add', name: name.value, imageUrl: imageUrl.value })) form.reset();
 };
 
 // Poll only while the tab is visible, which also keeps hosted usage low.
