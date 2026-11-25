@@ -10,6 +10,34 @@ Only the URL is saved. Use a direct, long-lasting link to the image file (http o
 If it doesn't load, the character's initial is shown. An HTTPS site such as Vercel needs HTTPS images.
 The image host can see the IP address of everyone who views the app.
 
+## OBS overlay
+
+`/embed` is a view-only list with a transparent background that updates by itself, every 3 seconds by default.
+The app has a **Copy OBS embed link** button for the whole party, and a 🔗 button on each character.
+Over plain HTTP (other than localhost), the link is shown in a box to copy by hand.
+If you've entered a passcode, copied links include it.
+
+In OBS, add a **Browser** source and set the URL to `https://<your-app>/embed`.
+Start with width 400 and height 600, then adjust to fit your party.
+
+| URL | Result |
+| --- | --- |
+| `/embed` | Everyone, stacked |
+| `/embed?layout=row` | Side by side, wrapping (try width 1600, height 200) |
+| `/embed?show=inspired` | Only characters who have inspiration |
+| `/embed?layout=row&show=inspired` | Both |
+| `/embed?refresh=10` | Check for changes every 10 seconds (1 to 60) |
+| `/embed?character=gruggle` | Only that character |
+
+For `character`, use the full name or any part that only one character has (capitals don't matter).
+Replace spaces with `%20`. To place characters separately, add one Browser source for each
+(try width 400, height 90). With `show=inspired`, the source stays empty until they're inspired.
+Renaming a character can break their link. Each source checks for changes on its own.
+
+If you set `APP_PASSCODE`, add it at the end: `/embed?layout=row#passcode=owlbear`
+(percent-encode characters such as spaces, `&`, `+` and `%`).
+The passcode also allows editing, so only share it with people you trust, and keep the URL off stream.
+
 ## Import and export
 
 **Export JSON** downloads the current list. **Import JSON** replaces the shared list for everyone

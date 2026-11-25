@@ -84,6 +84,28 @@ function avatar(c) {
   return img;
 }
 
+function embedUrl(name) {
+  const url = new URL('/embed', location.origin);
+  // %20 rather than "+" for spaces, so the link is easy to read and edit
+  if (name) url.search = `character=${encodeURIComponent(name)}`;
+  if (passcode) url.hash = `passcode=${encodeURIComponent(passcode)}`;
+  return url.href;
+}
+
+async function copyLink(button, link) {
+  try {
+    await navigator.clipboard.writeText(link);
+  } catch {
+    // Browsers only allow clipboard access on HTTPS or localhost.
+    prompt('Copy this embed link:', link);
+    return;
+  }
+  const label = button.dataset.label ??= button.textContent;
+  button.textContent = '✓';
+  clearTimeout(button.timer);
+  button.timer = setTimeout(() => { button.textContent = label; }, 1500);
+}
+
 function row(c) {
   const toggle = el('button', {
     type: 'button',
@@ -95,6 +117,14 @@ function row(c) {
   el('span', { className: 'info' },
     el('span', { className: 'name', textContent: c.name }),
     el('span', { className: 'badge', textContent: c.inspired ? '♪ Inspired' : 'Not inspired' })));
+  const link = el('button', {
+    type: 'button',
+    className: 'side',
+    textContent: '🔗',
+    title: 'Copy OBS embed link',
+    ariaLabel: `Copy embed link for ${c.name}`,
+    onclick: (event) => copyLink(event.currentTarget, embedUrl(c.name)),
+  });
   const image = el('button', {
     type: 'button',
     className: 'side',
@@ -113,7 +143,7 @@ function row(c) {
     ariaLabel: `Remove ${c.name}`,
     onclick: () => { if (confirm(`Remove ${c.name}?`)) act({ type: 'remove', id: c.id }); },
   });
-  return el('li', {}, toggle, image, remove);
+  return el('li', {}, toggle, link, image, remove);
 }
 
 function render() {
@@ -122,6 +152,8 @@ function render() {
   $('exportBtn').disabled = state.characters.length === 0;
   $('importBtn').disabled = false;
 }
+
+$('embedBtn').onclick = (event) => copyLink(event.currentTarget, embedUrl());
 
 $('exportBtn').onclick = () => {
   const characters = state.characters.map(({ name, inspired, imageUrl }) => ({ name, inspired, imageUrl }));

@@ -8,6 +8,9 @@ const files = {
   '/': ['index.html', 'text/html; charset=utf-8'],
   '/app.js': ['app.js', 'text/javascript; charset=utf-8'],
   '/style.css': ['style.css', 'text/css; charset=utf-8'],
+  '/embed': ['embed.html', 'text/html; charset=utf-8'],
+  '/embed.js': ['embed.js', 'text/javascript; charset=utf-8'],
+  '/embed.css': ['embed.css', 'text/css; charset=utf-8'],
 };
 
 const server = http.createServer(async (req, res) => {
