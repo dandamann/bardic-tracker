@@ -11,6 +11,8 @@ const files = {
   '/embed': ['embed.html', 'text/html; charset=utf-8'],
   '/embed.js': ['embed.js', 'text/javascript; charset=utf-8'],
   '/embed.css': ['embed.css', 'text/css; charset=utf-8'],
+  '/favicon.svg': ['favicon.svg', 'image/svg+xml'],
+  '/apple-touch-icon.png': ['apple-touch-icon.png', 'image/png'],
 };
 
 const server = http.createServer(async (req, res) => {
