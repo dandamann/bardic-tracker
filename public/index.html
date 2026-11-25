@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bardic Inspiration</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Bardic Inspiration</h1>
+      <span id="status" role="status">Connecting…</span>
+    </header>
+    <p id="error" role="alert" hidden></p>
+    <p class="muted">Tap a character to add or remove inspiration.</p>
+    <ul id="party"></ul>
+    <p id="empty" class="muted" hidden>No characters yet. Add your party below.</p>
+    <form id="form">
+      <input name="name" maxlength="40" required autocomplete="off" placeholder="Character name" aria-label="Character name">
+      <button class="primary">Add</button>
+    </form>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

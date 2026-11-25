@@ -1,0 +1,13 @@
+services:
+  bardic:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      APP_PASSCODE: ${APP_PASSCODE:-}
+    volumes:
+      - bardic-data:/data
+    restart: unless-stopped
+
+volumes:
+  bardic-data:
