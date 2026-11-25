@@ -28,6 +28,7 @@ Start with width 400 and height 600, then adjust to fit your party.
 | `/embed?layout=row&show=inspired` | Both |
 | `/embed?refresh=10` | Check for changes every 10 seconds (1 to 60) |
 | `/embed?character=gruggle` | Only that character |
+| `/embed?names=off` | Hide names, leaving the picture and ♪ |
 | `/embed?background=00ff00` | Page colour (transparent by default) |
 | `/embed?card=000000cc` | Colour of the box behind each name |
 

@@ -5,6 +5,9 @@ const seconds = Number(params.get('refresh') ?? 3);
 const POLL_MS = (seconds >= 1 && seconds <= 60 ? seconds : 3) * 1000;
 const onlyInspired = params.get('show') === 'inspired';
 document.body.classList.toggle('row', params.get('layout') === 'row');
+// ?names=off leaves just the picture and the inspiration mark.
+document.body.classList.toggle('no-names', params.get('names') === 'off');
+
 // ?background= colours the page and ?card= the box behind each name.
 // Hex works without "#", which would otherwise cut the address short.
 // Invalid colours are ignored.
