@@ -28,6 +28,11 @@ Start with width 400 and height 600, then adjust to fit your party.
 | `/embed?layout=row&show=inspired` | Both |
 | `/embed?refresh=10` | Check for changes every 10 seconds (1 to 60) |
 | `/embed?character=gruggle` | Only that character |
+| `/embed?background=00ff00` | Page colour (transparent by default) |
+| `/embed?card=000000cc` | Colour of the box behind each name |
+
+Colours can be hex **without** `#` (3, 4, 6 or 8 digits; 4 and 8 include opacity) or a name such as
+`green` or `transparent`. Invalid colours are ignored. Names are white, so keep the boxes dark.
 
 For `character`, use the full name or any part that only one character has (capitals don't matter).
 Replace spaces with `%20`. To place characters separately, add one Browser source for each

@@ -5,6 +5,19 @@ const seconds = Number(params.get('refresh') ?? 3);
 const POLL_MS = (seconds >= 1 && seconds <= 60 ? seconds : 3) * 1000;
 const onlyInspired = params.get('show') === 'inspired';
 document.body.classList.toggle('row', params.get('layout') === 'row');
+// ?background= colours the page and ?card= the box behind each name.
+// Hex works without "#", which would otherwise cut the address short.
+// Invalid colours are ignored.
+function colour(name) {
+  let value = (params.get(name) || '').trim();
+  if (/^([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(value)) value = `#${value}`;
+  return CSS.supports('color', value) ? value : null;
+}
+for (const name of ['background', 'card']) {
+  const value = colour(name);
+  if (value) document.documentElement.style.setProperty(`--${name}`, value);
+}
+
 // After "#" so the passcode is not part of the page address sent to the server.
 const passcode = new URLSearchParams(location.hash.slice(1)).get('passcode') || '';
 
