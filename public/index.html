@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Bardic Inspiration</title>
   <link rel="stylesheet" href="/style.css">
 </head>
@@ -28,6 +28,10 @@
       <input type="file" id="importFile" accept=".json,application/json" hidden>
     </div>
   </main>
+  <nav class="app-switcher" aria-label="Party apps" hidden>
+    <a id="soundboardLink">🔊 Soundboard</a>
+    <a href="/" aria-current="page">♪ Inspiration</a>
+  </nav>
   <script src="/app.js"></script>
 </body>
 </html>

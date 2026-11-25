@@ -35,3 +35,11 @@ button:disabled { opacity:.4; cursor:default; }
   .avatar { width:44px; height:44px; }
   .side { min-width:38px; padding:8px 6px; }
 }
+
+/* Switcher between the party apps. Keep the matching block in the other app in step. */
+.app-switcher { position:fixed; left:0; right:0; bottom:0; z-index:20; display:flex; justify-content:center;
+  padding:0 8px env(safe-area-inset-bottom); background:var(--card); border-top:1px solid var(--line); }
+.app-switcher a { flex:1; max-width:220px; display:flex; align-items:center; justify-content:center; min-height:52px;
+  border-top:3px solid transparent; color:var(--muted); font-size:.95rem; font-weight:600; text-decoration:none; }
+.app-switcher a[aria-current] { border-top-color:var(--accent); color:var(--ink); }
+body:has(.app-switcher:not([hidden])) main { padding-bottom:calc(76px + env(safe-area-inset-bottom)); }

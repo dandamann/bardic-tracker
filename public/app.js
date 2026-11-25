@@ -30,11 +30,18 @@ async function request(action) {
   return body;
 }
 
+// The bar only appears when the server has a soundboard address.
+function showSwitcher(url) {
+  if (url) $('soundboardLink').href = url;
+  document.querySelector('.app-switcher').hidden = !url;
+}
+
 // Ignore responses older than what is already shown.
 function accept(next) {
   if (state && next.version < state.version) return;
   const changed = !state || next.version !== state.version;
   state = next;
+  showSwitcher(next.soundboardUrl);
   if (changed) render();
 }
 

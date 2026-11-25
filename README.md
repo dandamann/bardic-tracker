@@ -79,6 +79,14 @@ Set `STATE_KEY` to a different value per environment to separate them.
 An open, visible tab makes about 1,200 requests (and Redis reads) per hour.
 Compare that with your plan limits; raise `POLL_MS` in `public/app.js` to reduce it.
 
+## Link to a soundboard (optional)
+
+Set `SOUNDBOARD_URL` to a full `http://` or `https://` address to show a bottom bar linking to it.
+Without it, there's no bar. With a passcode set, the address is only sent to people who enter it.
+On Vercel, add the environment variable and redeploy. With Docker:
+
+    SOUNDBOARD_URL=https://soundboard.example.com docker compose up -d
+
 ## Passcode (optional)
 
 Without one, anyone with the URL can view and edit. Set `APP_PASSCODE` to require it:
