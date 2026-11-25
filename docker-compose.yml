@@ -5,6 +5,7 @@ services:
       - "3000:3000"
     environment:
       APP_PASSCODE: ${APP_PASSCODE:-}
+      ADMIN_PASSCODE: ${ADMIN_PASSCODE:-}
       SOUNDBOARD_URL: ${SOUNDBOARD_URL:-}
     volumes:
       - bardic-data:/data

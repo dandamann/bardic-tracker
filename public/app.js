@@ -2,7 +2,11 @@ const $ = (id) => document.getElementById(id);
 const POLL_MS = 3000;
 let state = null;
 let passcode = '';
-try { passcode = localStorage.getItem('passcode') || ''; } catch {}
+let adminPasscode = '';
+try {
+  passcode = localStorage.getItem('passcode') || '';
+  adminPasscode = localStorage.getItem('adminPasscode') || '';
+} catch {}
 
 // textContent everywhere: names are user input.
 function el(tag, props = {}, ...children) {
@@ -18,10 +22,14 @@ function showError(message) {
   if (message) showError.timer = setTimeout(() => showError(''), 6000);
 }
 
-async function request(action) {
+async function request(action, admin = adminPasscode) {
   const res = await fetch('/api/state', {
     method: action ? 'POST' : 'GET',
-    headers: { 'Content-Type': 'application/json', 'X-Passcode': encodeURIComponent(passcode) },
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Passcode': encodeURIComponent(passcode),
+      'X-Admin-Passcode': encodeURIComponent(admin),
+    },
     body: action && JSON.stringify(action),
     signal: AbortSignal.timeout(8000),
   });
@@ -39,7 +47,7 @@ function showSwitcher(url) {
 // Ignore responses older than what is already shown.
 function accept(next) {
   if (state && next.version < state.version) return;
-  const changed = !state || next.version !== state.version;
+  const changed = !state || next.version !== state.version || next.canManage !== state.canManage;
   state = next;
   showSwitcher(next.soundboardUrl);
   if (changed) render();
@@ -150,7 +158,8 @@ function row(c) {
     ariaLabel: `Remove ${c.name}`,
     onclick: () => { if (confirm(`Remove ${c.name}?`)) act({ type: 'remove', id: c.id }); },
   });
-  return el('li', {}, toggle, link, image, remove);
+  // Only hides the controls. The server is what refuses locked changes.
+  return el('li', {}, toggle, link, ...(state.canManage ? [image, remove] : []));
 }
 
 function render() {
@@ -158,7 +167,38 @@ function render() {
   $('empty').hidden = state.characters.length > 0;
   $('exportBtn').disabled = state.characters.length === 0;
   $('importBtn').disabled = false;
+  $('importBtn').hidden = $('form').hidden = !state.canManage;
+  $('empty').textContent = state.canManage
+    ? 'No characters yet. Add your party below.'
+    : 'No characters yet. Press Manage to add your party.';
+  $('manageBtn').hidden = !state.adminRequired;
+  $('manageBtn').textContent = state.canManage ? '🔓 Lock' : '🔒 Manage';
 }
+
+function setAdminPasscode(value) {
+  adminPasscode = value;
+  try { localStorage.setItem('adminPasscode', value); } catch {}
+}
+
+$('manageBtn').onclick = async () => {
+  if (state.canManage) {
+    setAdminPasscode('');
+    state = { ...state, canManage: false }; // hide the controls straight away
+    render();
+    return refresh();
+  }
+  const entry = prompt('Admin passcode:');
+  if (!entry) return;
+  try {
+    const next = await request(undefined, entry); // check it before saving it
+    if (!next.canManage) return showError('That admin passcode is not right.');
+    setAdminPasscode(entry);
+    accept(next);
+    showError('');
+  } catch (err) {
+    showError(err.message);
+  }
+};
 
 $('embedBtn').onclick = (event) => copyLink(event.currentTarget, embedUrl());
 

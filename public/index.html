@@ -16,7 +16,7 @@
     <p class="muted">Tap a character to add or remove inspiration.</p>
     <ul id="party"></ul>
     <p id="empty" class="muted" hidden>No characters yet. Add your party below.</p>
-    <form id="form">
+    <form id="form" hidden>
       <input name="name" maxlength="40" required autocomplete="off" placeholder="Character name" aria-label="Character name">
       <input name="imageUrl" type="url" maxlength="1000" autocomplete="off" placeholder="Image URL (optional)" aria-label="Image URL (optional)">
       <button class="primary">Add</button>
@@ -24,8 +24,9 @@
     <div class="transfer">
       <button type="button" id="embedBtn">🔗 Copy OBS embed link</button>
       <button type="button" id="exportBtn" disabled>Export JSON</button>
-      <button type="button" id="importBtn" disabled>Import JSON</button>
+      <button type="button" id="importBtn" disabled hidden>Import JSON</button>
       <input type="file" id="importFile" accept=".json,application/json" hidden>
+      <button type="button" id="manageBtn" hidden>🔒 Manage</button>
     </div>
   </main>
   <nav class="app-switcher" aria-label="Party apps" hidden>

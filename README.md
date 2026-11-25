@@ -87,10 +87,22 @@ On Vercel, add the environment variable and redeploy. With Docker:
 
     SOUNDBOARD_URL=https://soundboard.example.com docker compose up -d
 
-## Passcode (optional)
+## Passcodes (optional)
 
-Without one, anyone with the URL can view and edit. Set `APP_PASSCODE` to require it:
+With neither set, anyone with the URL can view and edit.
 
-    APP_PASSCODE=owlbear docker compose up -d
+| Variable | What it locks |
+| --- | --- |
+| `ADMIN_PASSCODE` | Adding and removing characters, changing images, and importing |
+| `APP_PASSCODE` | The whole app, including viewing and the OBS overlay |
 
-On Vercel, add it as an environment variable and redeploy.
+With `ADMIN_PASSCODE`, anyone can still view, add or remove inspiration, copy embed links and export.
+Press **🔒 Manage** to enter it. The browser remembers it until you press **🔓 Lock**.
+Copied embed links never include it, and the overlay doesn't need it.
+
+You can use either or both. The server enforces them. Use long, unique passcodes, because
+the app doesn't limit guessing, and use HTTPS so they aren't sent in readable form.
+
+    ADMIN_PASSCODE='use-your-own-several-random-words' docker compose up -d
+
+On Vercel, add the environment variable and redeploy.
